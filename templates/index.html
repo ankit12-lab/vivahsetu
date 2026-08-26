@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="VivahSetu — discover wedding venues and trusted wedding services.">
+  <title>VivahSetu — Your Perfect Wedding Starts Here</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="nav" id="top">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top"><span class="brand-mark">V</span><span>Vivah<span>Setu</span></span></a>
+    <button class="menu-btn" aria-label="Open menu" onclick="document.body.classList.toggle('menu-open')">☰</button>
+    <nav>
+      <a href="#venues">Venues</a>
+      <a href="#services">Services</a>
+      <a href="#budget">Budget</a>
+      <a href="#how">How it works</a>
+      <a class="nav-cta" href="#vendor">List your business</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow"><span>✦</span> India's simpler way to plan a wedding</div>
+      <h1>Your perfect wedding <em>starts here.</em></h1>
+      <p class="hero-lead">Discover beautiful venues and trusted wedding professionals — compare, enquire and plan everything in one place.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#venues">Explore venues <span>→</span></a>
+        <a class="btn btn-ghost" href="#enquiry">Get a free quote</a>
+      </div>
+      <div class="trust-row"><span>✓ Verified listings</span><span>✓ Local vendors</span><span>✓ Free enquiries</span></div>
+    </div>
+    <div class="hero-art">
+      <div class="photo-frame">
+        <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=1100&q=85" alt="Elegant wedding ceremony">
+        <div class="floating-card">
+          <div class="mini-icon">♥</div>
+          <div><strong>Make it memorable</strong><small>Everything for your big day</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap search-panel" id="search">
+    <div class="search-title"><span>Find your</span><strong>perfect venue</strong></div>
+    <label><small>Location</small><span>📍 Gorakhpur</span></label>
+    <label><small>Looking for</small><select id="venueType"><option>Wedding Venue</option><option>Banquet Hall</option><option>Wedding Lawn</option></select></label>
+    <label><small>Guests</small><select id="guestFilter"><option value="0">Any guest count</option><option value="250">250+ guests</option><option value="500">500+ guests</option><option value="700">700+ guests</option></select></label>
+    <button class="search-btn" onclick="filterVenues()">Search <span>→</span></button>
+  </div>
+</section>
+
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="section-head"><div><div class="kicker">Everything you need</div><h2>Plan your celebration, <em>your way.</em></h2></div><a href="#enquiry" class="text-link">Need help planning? →</a></div>
+    <div class="service-grid">
+      <a href="#venues" class="service-card"><span class="service-icon">⌂</span><h3>Wedding Venues</h3><p>Banquets, lawns & luxury spaces</p><span>Explore →</span></a>
+      <a href="#enquiry" class="service-card"><span class="service-icon">◉</span><h3>Photographers</h3><p>Capture every beautiful moment</p><span>Find vendors →</span></a>
+      <a href="#enquiry" class="service-card"><span class="service-icon">✿</span><h3>Decorators</h3><p>Turn your vision into a setting</p><span>Find vendors →</span></a>
+      <a href="#enquiry" class="service-card"><span class="service-icon">♨</span><h3>Caterers</h3><p>Menus your guests will remember</p><span>Find vendors →</span></a>
+      <a href="#enquiry" class="service-card"><span class="service-icon">✦</span><h3>Makeup Artists</h3><p>Bridal & occasion beauty</p><span>Find vendors →</span></a>
+      <a href="#enquiry" class="service-card"><span class="service-icon">♫</span><h3>Music & DJs</h3><p>Set the mood for your celebration</p><span>Find vendors →</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="section venues-section" id="venues">
+  <div class="wrap">
+    <div class="section-head">
+      <div><div class="kicker">Handpicked for you</div><h2>Featured <em>venues</em></h2><p class="section-sub">Beautiful spaces in and around Gorakhpur, ready for your celebration.</p></div>
+      <div class="filter-pills"><button class="active" onclick="setTag('all',this)">All</button><button onclick="setTag('Premium',this)">Premium</button><button onclick="setTag('Popular',this)">Popular</button><button onclick="setTag('Budget',this)">Budget</button></div>
+    </div>
+    <div class="venue-grid" id="venueGrid">
+      {% for v in venues %}
+      <article class="venue-card" data-tag="{{ v['tag'] }}" data-capacity="{{ v['capacity'] }}">
+        <div class="venue-img">
+          <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80" alt="{{ v['name'] }}">
+          <span class="badge">{{ v['tag'] }}</span><span class="heart">♡</span>
+        </div>
+        <div class="venue-body">
+          <div class="venue-meta"><span>★ {{ v['rating'] }}</span><span>{{ v['capacity'] }} guests</span></div>
+          <h3>{{ v['name'] }}</h3><p>📍 {{ v['area'] }}</p>
+          <div class="venue-bottom"><strong>₹{{ "{:,}".format(v['price']) }} <small>onwards</small></strong><a href="#enquiry" onclick="prefillVenue('{{ v['name']|e }}')">Enquire →</a></div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section cream" id="how">
+  <div class="wrap split">
+    <div><div class="kicker">Simple from start to finish</div><h2>Planning a wedding<br><em>should feel joyful.</em></h2><p class="section-sub">VivahSetu keeps the search simple so you can spend more time enjoying the moments that matter.</p></div>
+    <div class="steps">
+      <div class="step"><b>01</b><div><h3>Tell us your plan</h3><p>Share your date, guest count, location and budget.</p></div></div>
+      <div class="step"><b>02</b><div><h3>Discover your options</h3><p>Explore venues and connect with local wedding professionals.</p></div></div>
+      <div class="step"><b>03</b><div><h3>Compare & enquire</h3><p>Shortlist your favourites and send a free enquiry.</p></div></div>
+      <div class="step"><b>04</b><div><h3>Celebrate</h3><p>Leave the planning stress behind and enjoy your day.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="budget">
+  <div class="wrap budget-wrap">
+    <div class="budget-copy"><div class="kicker">Smart planning</div><h2>Build a wedding budget <em>that works.</em></h2><p class="section-sub">Start with your guest count and see a simple planning estimate. Adjust the sliders to match your priorities.</p><a href="#enquiry" class="btn btn-primary">Talk to a planner →</a></div>
+    <div class="budget-card">
+      <div class="budget-top"><span>Estimated wedding budget</span><strong id="budgetTotal">₹5,15,000</strong></div>
+      <label>Guests <output id="guestOut">500</output><input id="budgetGuests" type="range" min="100" max="1000" value="500" oninput="updateBudget()"></label>
+      <div class="budget-lines">
+        <div><span>Venue</span><strong id="venueBudget">₹1,00,000</strong></div>
+        <div><span>Catering</span><strong id="foodBudget">₹2,50,000</strong></div>
+        <div><span>Decoration</span><strong id="decorBudget">₹75,000</strong></div>
+        <div><span>Photo + makeup</span><strong id="photoBudget">₹90,000</strong></div>
+      </div>
+      <p class="budget-note">Indicative planning estimate. Actual vendor quotes may vary.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section enquiry-section" id="enquiry">
+  <div class="wrap enquiry-grid">
+    <div class="enquiry-copy"><div class="kicker">Let's make it happen</div><h2>Tell us about your <em>big day.</em></h2><p>Send one enquiry and our team can help you discover the right options for your celebration.</p><div class="contact-note"><span>✦</span><div><strong>Free consultation</strong><small>No commitment. Just helpful guidance.</small></div></div></div>
+    <form class="form-card" id="enquiryForm">
+      <div class="form-head"><h3>Get a free quote</h3><span>1 minute</span></div>
+      <input name="name" placeholder="Your name" required>
+      <div class="two"><input name="phone" placeholder="Mobile number" required><select name="event_type"><option value="">Event type</option><option>Wedding</option><option>Reception</option><option>Engagement</option><option>Other</option></select></div>
+      <div class="two"><input name="event_date" type="date"><input name="guests" type="number" min="1" placeholder="Guests"></div>
+      <div class="two"><select name="budget"><option value="">Budget range</option><option>Under ₹2 lakh</option><option>₹2–5 lakh</option><option>₹5–10 lakh</option><option>₹10 lakh+</option></select><input name="location" placeholder="Preferred area"></div>
+      <textarea name="message" rows="3" placeholder="Tell us anything else…"></textarea>
+      <button class="btn btn-primary full" type="submit">Send my enquiry <span>→</span></button>
+      <p class="form-status" id="enquiryStatus"></p>
+    </form>
+  </div>
+</section>
+
+<section class="section vendor-section" id="vendor">
+  <div class="wrap vendor-banner">
+    <div><div class="kicker">For wedding professionals</div><h2>Grow your business<br><em>with VivahSetu.</em></h2><p>Get discovered by couples who are actively planning their celebration.</p></div>
+    <form class="vendor-mini" id="vendorForm">
+      <input name="business" placeholder="Business name" required>
+      <select name="category" required><option value="">Category</option><option>Photographer</option><option>Decorator</option><option>Caterer</option><option>Makeup Artist</option><option>DJ / Music</option><option>Other</option></select>
+      <input name="phone" placeholder="Mobile number" required>
+      <button class="btn btn-light" type="submit">List my business →</button>
+      <p class="form-status" id="vendorStatus"></p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap footer-grid">
+    <div><a class="brand footer-brand" href="#top"><span class="brand-mark">V</span><span>Vivah<span>Setu</span></span></a><p>Bringing beautiful weddings together.</p></div>
+    <div><strong>Explore</strong><a href="#venues">Venues</a><a href="#services">Services</a><a href="#budget">Budget planner</a></div>
+    <div><strong>For business</strong><a href="#vendor">List your business</a><a href="/admin/login">Admin</a></div>
+    <div><strong>Need help?</strong><p>Tell us what you're planning and we'll help you find the right starting point.</p><a href="#enquiry" class="text-link">Get in touch →</a></div>
+  </div>
+  <div class="wrap footer-bottom"><span>© 2026 VivahSetu. All rights reserved.</span><span>Made for celebrations in India ♥</span></div>
+</footer>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
